@@ -188,7 +188,7 @@ user_id, lang_code
 
 15. Next Steps (not included in MVP)
 - Group chats
-- pinecone embedding based recommendation searching with cosine similarity?
+- Pinecone embedding based recommendation searching with cosine similarity?
 
 - Premium Features (Everyone can use the app free. Premium gives daily users useful extras:)
     Restrict incoming friend requests by gender
