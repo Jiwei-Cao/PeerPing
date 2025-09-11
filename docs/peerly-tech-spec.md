@@ -23,7 +23,7 @@ Peerly — MVP Tech Specification
 - UserTag
     user_id, tag_id, intent (learn/teach)
 - UserLanguage
-user_id, lang_code
+    user_id, lang_code
 - Availability
     user_id, slot
 - Save
@@ -66,3 +66,68 @@ user_id, lang_code
     GET /conversations
     GET /conversations/{id}/messages
     POST /conversations/{id}/messages
+
+4. Monorepo 
+> **Note:** Key directories + representative files only.
+Peerly/
+  docs/
+    peerly-product-spec.md
+    peerly-tech-spec.md
+    api-contract.md
+    openapi.yaml
+    adr/
+    runbooks/
+    threat-model.md
+    README.md                 # explains docs purpose
+  app/
+    src/
+    __tests__/                # RN tests
+    app.json
+    package.json
+  server/
+    src/main/java/...
+    src/main/resources/
+    src/test/java/...          # unit/integration tests
+    build.gradle|pom.xml
+    flyway/
+    Dockerfile
+  chat/
+    config.yaml
+    server_modules/
+  infra/
+    terraform/
+      modules/
+      envs/
+        dev/
+          main.tf
+          variables.tf
+          dev.tfvars
+        prod/
+          main.tf
+          variables.tf
+          prod.tfvars
+    pipelines/
+    README.md                 # explains terraform usage
+  scripts/
+    dev.up.sh
+    dev.down.sh
+    db.migrate.sh
+    db.seed.sh
+    privacy.export.ts
+    privacy.delete.ts
+    loadtest.k6.js
+    test.sh                   # optional wrapper for tests
+  .github/
+    workflows/
+      server-ci.yml
+      app-ci.yml
+      infra-ci.yml
+    ISSUE_TEMPLATE.md
+    CODEOWNERS                # optional
+  .env.example
+  docker-compose.yml
+  Makefile
+  CONTRIBUTING.md
+  SECURITY.md
+  LICENSE
+  README.md
