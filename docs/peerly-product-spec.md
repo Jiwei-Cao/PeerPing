@@ -101,31 +101,13 @@ Secondary KPIs
     Safety features 
     Push notifications
     Analytics
+- Post MVP
+    Group chats
+    Pinecone embedding based recommendation searching with cosine similarity?
 
-11. Next Steps
-- Backend
-    Finalize DB schema
-    Implement auth + profile endpoints
-    Build discover + search APIs (city-based)
-    Add connection + messaging system
-- Frontend
-    Onboarding flow (multi-step)
-    Discover feed (card list with friend count)
-    Search screen with filters
-    Messages + chat UI (requests + chats)
-    Profile management
-- Infra
-    Deploy backend to AWS App Runner
-    Set up Postgres RDS + S3 bucket
-    Configure Expo build for iOS/Android
-
-12. Next Steps (not included in MVP)
-- Group chats
-- Pinecone embedding based recommendation searching with cosine similarity?
-
-- Premium Features (Everyone can use the app free. Premium gives daily users useful extras:)
-    Restrict incoming friend requests by gender
-    Restrict incoming requests by age range 
-    Extended daily friend requests from 10 to 100?
-    See who saved you feaure 
-    Boost profile: appear higher in Discover feed and searches
+    Premium Features (Everyone can use the app free. Premium gives daily users useful extras:)
+        Restrict incoming friend requests by gender
+        Restrict incoming requests by age range 
+        Extended daily friend requests from 10 to 100?
+        See who saved you feature 
+        Boost profile: appear higher in Discover feed and searches
