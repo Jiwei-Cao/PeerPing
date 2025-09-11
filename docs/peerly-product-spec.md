@@ -15,22 +15,12 @@ Secondary KPIs
 - Response rate to DMs
 - Report/block usage
 
-2. Platform & Tech
-- Mobile: React Native + Expo
-- Backend: Spring Boot (Java 21) + REST API
-- Database: PostgreSQL (RDS)
-- Chat: Nakama
-- Storage: AWS S3 + CloudFront
-- Push: Expo Push → APNs/FCM
-- Infra: AWS App Runner, RDS, S3, Route53
-- Auth: Email/password + Sign in with Apple
-
-3. User Roles
+2. User Roles
 - Learner: wants to learn skills
 - Teacher: offers skills
 - Both: can do both
 
-4. Onboarding Flow
+3. Onboarding Flow
 - Select role: Learner / Teacher / Both
 - Add profile basics: display name, avatar, city (dropdown)
 - Choose skills:
@@ -45,13 +35,13 @@ Secondary KPIs
 - Enable push notifications
 - Land on Discover feed
 
-5. Navigation (tabs at the bottom of the screen)
+4. Navigation (tabs at the bottom of the screen)
 - Discover → ranked feed of user cards (vertical scroll like instagram posts)
 - Search → filter by tags, role, city, language, availability
 - Messages → chats (only after accepted friend requests) and pending requests
 - Profile → edit profile, view saves, manage preferences
 
-6. Core Features
+5. Core Features
 - Discover
     Vertical feed of cards (same city only)
     Card content: avatar, name, role badge, city, number of friends, tags, languages, availability, bio
@@ -74,7 +64,7 @@ Secondary KPIs
     Access community guidelines
     Delete account
 
-7. Matching & Ranking
+6. Matching & Ranking
 - Users matched by city only
 - Ranking score:
     Teach <-> Learn tag overlap
@@ -84,82 +74,25 @@ Secondary KPIs
     Profile completeness
     Diversity: avoid repeating same user or tag cluster
 
-8. Safety
+7. Safety
 - Report profiles and messages
 - Block to hide users completely
 - Minimum age: 16+
 - GDPR Law: export and delete data (including S3) on request
 
-9. Anti-Spam
+8. Anti-Spam
 - Max 10 friend requests/day
 - Unlimited accepts/declines/replies
 - Downrank users with high report ratios
 
-10. Data Model (Key Tables)
-- User
-    id, username, email, password_hash
-    display_name, avatar_url, bio
-    role (learner/teacher/both)
-    city
-    friends_count (cached)
-    created_at, last_active_at
-- Tag
-    id, name, category
-- UserTag
-    user_id, tag_id, intent (learn/teach)
-- UserLanguage
-user_id, lang_code
-- Availability
-    user_id, slot
-- Save
-    saver_id, saved_user_id
-- Connection
-    id
-    requester_id, recipient_id
-    status (pending / accepted / declined / cancelled)
-    created_at, updated_at
-- Block
-    blocker_id, blocked_user_id
-- Report
-    reporter_id, reported_user_id, reason, detail
-- Conversation and Message
-    conversation_id, participants, messages
-
-11. API Endpoints (Summary)
-- Auth
-    POST /auth/register
-    POST /auth/login
-    GET /auth/me
-- Profile
-    GET /users/me
-    PATCH /users/me
-    PUT /users/me/tags
-    PUT /users/me/languages
-    PUT /users/me/availability
-- Discover & Search
-    GET /discover?city=London&page
-    GET /search?q&city=London&role&lang&availability&page
-- Social
-    POST /save/{userId}
-    DELETE /save/{userId}
-    POST /block/{userId}
-    POST /report
-    POST /connections {recipientId}
-    PATCH /connections/{id} {accept|decline|cancel}
-    GET /connections?status=pending|accepted
-- Messaging
-    GET /conversations
-    GET /conversations/{id}/messages
-    POST /conversations/{id}/messages
-
-12. Analytics
+9. Analytics
 - Track onboarding completion
 - Track discover views and card actions
 - Track friend requests (sent, accepted, declined)
 - Track DMs (messages sent)
 - Track reports and blocks
 
-13. Roadmap
+10. Roadmap
 - MVP (Now)
     Onboarding
     City-based discover
@@ -169,7 +102,7 @@ user_id, lang_code
     Push notifications
     Analytics
 
-14. Next Steps
+11. Next Steps
 - Backend
     Finalize DB schema
     Implement auth + profile endpoints
@@ -186,7 +119,7 @@ user_id, lang_code
     Set up Postgres RDS + S3 bucket
     Configure Expo build for iOS/Android
 
-15. Next Steps (not included in MVP)
+12. Next Steps (not included in MVP)
 - Group chats
 - Pinecone embedding based recommendation searching with cosine similarity?
 
