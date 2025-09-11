@@ -133,14 +133,45 @@ Peerly — MVP Tech Specification
 - RDS automatic snapshots; S3 lifecycle for temp exports.
 - Route53 + ACM; CloudFront in front of S3.
 
-14. Build Order (first 10 tasks)
-    1) Finalise openapi.yaml; generate RN client.
-    2) Flyway V1 schema (+ UNIQUEs/indexes); seed tags/cities.
-    3) Auth: register/login/refresh/logout; JWT & refresh store; hashing.
-    4) Profile: GET/PATCH; tags/languages/availability.
-    5) Presigned S3 upload; avatar flow end-to-end.
-    6) /discover (city, cursor) with basic ranking + indexes.
-    7) Connections: create (idempotent), list, accept/decline/cancel with block checks.
-    8) Messaging: Nakama integration or simple tables; send/receive.
-    9) Rate limits + analytics counters.
-    10) CI stubs; App Runner (dev), EAS dev build; smoke tests.
+14. Build Order (revised)
+    1) API contract first
+        Do: Finalise docs/openapi.yaml (/v1, cursor pagination, RFC7807, Idempotency-Key).
+        Output: docs/api-contract.md auto-derived + generated TS client in app/src/api.
+        Quick test: Lint spec; generate client; import in RN.
+    2) DB baseline
+        Do: server/flyway/V1__init.sql with all tables + UNIQUE/INDEXes; seed cities, tags.
+        Output: Local Postgres up via docker-compose; Flyway migrates on boot.
+        Quick test: SELECT COUNT(*) FROM tag; returns >0.
+    3) Auth (email/password)
+        Do: POST /auth/register|login|refresh|logout; bcrypt/Argon2id; refresh store; lockout/backoff.
+        Output: Integration tests for happy/invalid/lockout; Sentry hooked.
+        Quick test: Login → get access+refresh; refresh works; logout revokes.
+    4) Profile basics
+        Do: GET/PATCH /users/me; PUT tags/languages/availability.
+        Output: Constraints enforced; returns full user.
+        Quick test: Update bio/city; add tags; read back.
+    5) Media upload (avatars)
+        Do: POST /users/me/avatar/upload-url (presigned PUT) → PATCH /users/me with CloudFront URL.
+        Output: S3 object visible via CDN URL.
+        Quick test: Upload JPEG <5 MB; profile shows new avatar URL.
+    6) Discover (read path)
+        Do: GET /discover?city=&limit=&cursor= with basic ranking + required indexes.
+        Output: Stable cursor paging; diversity cap per session (simple).
+        Quick test: Scroll twice; no dups; nextCursor changes; p95 < 300 ms locally.
+    7) Connections
+        Do: POST /connections (Idempotency-Key), GET /connections?status=, PATCH /connections/{id} (accept/decline/cancel); block checks everywhere.
+        Output: Duplicate prevention via pair_key; rate limit 10/day.
+        Quick test: Send → accept; retry same POST with same Idempotency-Key does not create second row.
+    8) Messaging (MVP)
+        DO (Nakama): create/link users; open 1:1; list/send messages via Nakama SDK; persist conversation rows with nakama_conversation_id.
+        Output: App can send/receive 1:1.
+        Quick test: Two test users exchange >3 messages; order correct with cursor.
+    9) Rate limits + analytics
+        Do: Enforce 10/day requests; return 429 + Retry-After. Add event logging (rows or CloudWatch): onboarding, discover impressions/actions, requests, DMs, reports/blocks.
+        Output: rate_limit table or view; events table.
+        Quick test: Send 11th request → 429; events row exists.
+    10) CI + Dev deploys
+        Do: server-ci.yml (test/build), app-ci.yml (lint/TS), infra-ci.yml (terraform fmt/validate/plan).
+        Do: App Runner (dev) with Docker image; Expo EAS dev build; smoke tests script.
+        Output: Dev backend URL; RN app pointing to it via EXPO_PUBLIC_API_BASE_URL.
+        Quick test: Fresh device can register, update profile, discover, request, chat.
