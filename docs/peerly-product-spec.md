@@ -101,7 +101,7 @@ Secondary KPIs
     Safety features 
     Push notifications
     Analytics
-- Post MVP
+- Post MVP (work on later)
     Group chats
     Pinecone embedding based recommendation searching with cosine similarity?
 
@@ -111,3 +111,5 @@ Secondary KPIs
         Extended daily friend requests from 10 to 100?
         See who saved you feature 
         Boost profile: appear higher in Discover feed and searches
+
+    Refresh tokens reset every 30 days so users are logged out every 30 days no matter what? Add a rolling refresh token (sliding window system) so that every time a client uses a refresh token successfully, the backend issues a new refresh token with a fresh 30-day expiry date. Allowing users to be logged in indefinitely as long as they are using the app consistently
