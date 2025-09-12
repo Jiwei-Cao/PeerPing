@@ -1,5 +1,74 @@
 Peerly — MVP Tech Specification 
 
+0) Monorepo 
+Peerly/
+  docs/
+    peerly-product-spec.md
+    peerly-tech-spec.md
+    api-contract.md
+    openapi.yaml
+    adr/
+    runbooks/
+    threat-model.md
+    README.md
+  app/                       # React Native + Expo
+    src/
+      api/                   # ← generated from openapi.yaml (TS client)
+      features/
+      components/
+      hooks/
+    __tests__/
+    app.json
+    package.json
+  server/                    # Spring Boot 3.3+, Java 21
+    src/main/java/...
+    src/main/resources/
+    src/test/java/...
+    flyway/                  # V1__init.sql etc.
+    build.gradle | pom.xml
+    Dockerfile
+  chat/                      # Nakama
+    config.yaml
+    server_modules/
+  infra/                     # IaC + envs
+    terraform/
+      modules/               # s3/, apprunner/, rds/, cloudfront/, route53/ (optional now)
+      envs/
+        dev/
+          main.tf
+          variables.tf
+          dev.tfvars
+        prod/
+          main.tf
+          variables.tf
+          prod.tfvars
+    README.md                # how to plan/apply
+  scripts/
+    dev.up.sh                # docker compose up (postgres, minio, nakama)
+    dev.down.sh
+    db.migrate.sh
+    db.seed.sh
+    privacy.export.ts
+    privacy.delete.ts
+    loadtest.k6.js
+    test.sh
+  .github/
+    workflows/
+      server-ci.yml
+      app-ci.yml
+      infra-ci.yml
+    ISSUE_TEMPLATE.md
+    CODEOWNERS
+  .env.example
+  docker-compose.yml         # local postgres (+minio/nakama)
+  Makefile                   # make dev/test/deploy helpers
+  CONTRIBUTING.md
+  SECURITY.md
+  LICENSE
+  README.md
+
+
+
 1. Platform & Tech
 - Mobile: React Native + Expo (EAS builds, OTA updates)
 - Backend: Spring Boot (Java 21), REST over HTTPS
@@ -134,44 +203,43 @@ Peerly — MVP Tech Specification
 - Route53 + ACM; CloudFront in front of S3.
 
 14. Build Order (revised)
-    1) API contract first
-        Do: Finalise docs/openapi.yaml (/v1, cursor pagination, RFC7807, Idempotency-Key).
-        Output: docs/api-contract.md auto-derived + generated TS client in app/src/api.
-        Quick test: Lint spec; generate client; import in RN.
-    2) DB baseline
-        Do: server/flyway/V1__init.sql with all tables + UNIQUE/INDEXes; seed cities, tags.
-        Output: Local Postgres up via docker-compose; Flyway migrates on boot.
-        Quick test: SELECT COUNT(*) FROM tag; returns >0.
-    3) Auth (email/password)
-        Do: POST /auth/register|login|refresh|logout; bcrypt/Argon2id; refresh store; lockout/backoff.
-        Output: Integration tests for happy/invalid/lockout; Sentry hooked.
-        Quick test: Login → get access+refresh; refresh works; logout revokes.
-    4) Profile basics
-        Do: GET/PATCH /users/me; PUT tags/languages/availability.
-        Output: Constraints enforced; returns full user.
-        Quick test: Update bio/city; add tags; read back.
-    5) Media upload (avatars)
-        Do: POST /users/me/avatar/upload-url (presigned PUT) → PATCH /users/me with CloudFront URL.
-        Output: S3 object visible via CDN URL.
-        Quick test: Upload JPEG <5 MB; profile shows new avatar URL.
-    6) Discover (read path)
-        Do: GET /discover?city=&limit=&cursor= with basic ranking + required indexes.
-        Output: Stable cursor paging; diversity cap per session (simple).
-        Quick test: Scroll twice; no dups; nextCursor changes; p95 < 300 ms locally.
-    7) Connections
-        Do: POST /connections (Idempotency-Key), GET /connections?status=, PATCH /connections/{id} (accept/decline/cancel); block checks everywhere.
-        Output: Duplicate prevention via pair_key; rate limit 10/day.
-        Quick test: Send → accept; retry same POST with same Idempotency-Key does not create second row.
-    8) Messaging (MVP)
-        DO (Nakama): create/link users; open 1:1; list/send messages via Nakama SDK; persist conversation rows with nakama_conversation_id.
-        Output: App can send/receive 1:1.
-        Quick test: Two test users exchange >3 messages; order correct with cursor.
-    9) Rate limits + analytics
-        Do: Enforce 10/day requests; return 429 + Retry-After. Add event logging (rows or CloudWatch): onboarding, discover impressions/actions, requests, DMs, reports/blocks.
-        Output: rate_limit table or view; events table.
-        Quick test: Send 11th request → 429; events row exists.
-    10) CI + Dev deploys
-        Do: server-ci.yml (test/build), app-ci.yml (lint/TS), infra-ci.yml (terraform fmt/validate/plan).
-        Do: App Runner (dev) with Docker image; Expo EAS dev build; smoke tests script.
-        Output: Dev backend URL; RN app pointing to it via EXPO_PUBLIC_API_BASE_URL.
-        Quick test: Fresh device can register, update profile, discover, request, chat.
+    1) API contract
+        Frontend: generate TS client (app/src/api) from openapi.yaml; set up routing, theme, state, error toasts.
+        Backend: finalize spec.
+        Milestone: app compiles calling typed client (no raw fetch).
+    2) Auth
+        Frontend: Signup/Login screens, token storage, refresh flow, protected routes.
+        Backend: /auth/register|login|refresh|logout.
+        Milestone: you can sign up/log in on device.
+    3) Profile & Onboarding
+        Frontend: onboarding wizard (role, city, tags, languages, availability, bio), Profile screen (GET/PATCH).
+        Backend: /users/me, PUT tags/languages/availability.
+        Milestone: complete onboarding and see profile reflected.
+    4) Media (avatars)
+        Frontend: image picker → call upload-url → PUT to S3 → PATCH profile with URL.
+        Backend: presigned PUT endpoint.
+        Milestone: avatar shows in Profile.
+    5) Discover
+        Frontend: feed UI (infinite scroll + pull-to-refresh), card actions (Save/Request).
+        Backend: /discover?city&limit&cursor, ranking + indexes.
+        Milestone: scroll 2+ pages without dupes; refresh resets feed.
+    6) Connections
+        Frontend: Request button, Requests inbox (Pending/Accepted), Accept/Decline/Cancel.
+        Backend: POST/GET/PATCH connections, idempotency, block checks, rate limit.
+        Milestone: full request lifecycle between two test users.
+    7) Messaging (MVP)
+        Frontend: Chat list + 1:1 thread; send/receive; basic retry.
+        Backend: Nakama integration (or simple tables).
+        Milestone: two devices can chat.
+    8) Analytics + Rate limits
+        Frontend: send key client events; handle 429 with friendly UI.
+        Backend: event logging; 429 + Retry-After.
+        Milestone: events visible server-side; 11th request is blocked.
+    9) Search (optional for MVP if Discover is good)
+        Frontend: search screen with filters; re-use card UI.
+        Backend: /search?...&cursor.
+        Milestone: filter by tag/role/language.
+    10) CI/CD + Builds
+        Frontend: EAS preview builds, OTA channel; env wiring.
+        Backend: App Runner dev; smoke tests.
+        Milestone: testers install via TestFlight/Play Internal and complete core flow.
