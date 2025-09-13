@@ -20,20 +20,27 @@ Secondary KPIs
 - Teacher: offers skills
 - Both: can do both
 
-3. Onboarding Flow
-- Select role: Learner / Teacher / Both
-- Add profile basics: display name, avatar, city (dropdown)
+3. Onboarding Flow (Progressive)
+First-time users see:
+- Welcome screen: "Find your learning community" with value proposition
+- Select role: "I want to..." → Learner / Teacher / Both
 - Choose skills:
-    Learner → up to 3 tags to learn
-    Teacher → up to 3 tags to teach
+    Learner → "What do you want to learn?" (up to 3 tags)
+    Teacher → "What can you teach?" (up to 3 tags)
+    Both → Two separate screens for learning and teaching
     Tag picker with recommendations + search
-- Select preferred languages
-- Pick availability: weeknights, weekends, mornings, evenings
-- Add optional bio (120 chars)
+- Select city: "Where are you based?" (dropdown)
+- Pick availability: "When do you like to learn?" → weeknights, weekends, mornings, evenings
+- Select languages: "What languages do you speak?"
+- Profile basics: "Tell us about yourself" → display name, optional bio (120 chars), avatar
+- Create account: "Secure your profile" → email, username, password (or Apple login)
+    Small "Already have an account? Sign in" link
 - Accept safety agreement (checkbox)
-- Create account: email, username, password (or Apple login)
-- Enable push notifications
+- Enable push notifications (optional)
 - Land on Discover feed
+
+Returning users see:
+- Login screen with "New to Peerly? Join us" link
 
 4. Navigation (tabs at the bottom of the screen)
 - Discover → ranked feed of user cards (vertical scroll like instagram posts)

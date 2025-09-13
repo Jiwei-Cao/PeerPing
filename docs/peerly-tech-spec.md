@@ -207,39 +207,35 @@ Peerly/
         Frontend: generate TS client (app/src/api) from openapi.yaml; set up routing, theme, state, error toasts.
         Backend: finalize spec.
         Milestone: app compiles calling typed client (no raw fetch).
-    2) Auth
-        Frontend: Signup/Login screens, token storage, refresh flow, protected routes.
-        Backend: /auth/register|login|refresh|logout.
-        Milestone: you can sign up/log in on device.
-    3) Profile & Onboarding
-        Frontend: onboarding wizard (role, city, tags, languages, availability, bio), Profile screen (GET/PATCH).
-        Backend: /users/me, PUT tags/languages/availability.
-        Milestone: complete onboarding and see profile reflected.
-    4) Media (avatars)
+    2) Onboarding & Auth
+        Frontend: Progressive onboarding (Welcome → Role → Skills → City → Availability → Languages → Profile → Create Account), separate Login screen for returning users, token storage, refresh flow.
+        Backend: /auth/register|login|refresh|logout, /users/me, PUT tags/languages/availability.
+        Milestone: new user completes full onboarding flow and lands on Discover; returning user can log in.
+    3) Media (avatars)
         Frontend: image picker → call upload-url → PUT to S3 → PATCH profile with URL.
         Backend: presigned PUT endpoint.
         Milestone: avatar shows in Profile.
-    5) Discover
+    4) Discover
         Frontend: feed UI (infinite scroll + pull-to-refresh), card actions (Save/Request).
         Backend: /discover?city&limit&cursor, ranking + indexes.
         Milestone: scroll 2+ pages without dupes; refresh resets feed.
-    6) Connections
+    5) Connections
         Frontend: Request button, Requests inbox (Pending/Accepted), Accept/Decline/Cancel.
         Backend: POST/GET/PATCH connections, idempotency, block checks, rate limit.
         Milestone: full request lifecycle between two test users.
-    7) Messaging (MVP)
+    6) Messaging (MVP)
         Frontend: Chat list + 1:1 thread; send/receive; basic retry.
         Backend: Nakama integration (or simple tables).
         Milestone: two devices can chat.
-    8) Analytics + Rate limits
+    7) Analytics + Rate limits
         Frontend: send key client events; handle 429 with friendly UI.
         Backend: event logging; 429 + Retry-After.
         Milestone: events visible server-side; 11th request is blocked.
-    9) Search (optional for MVP if Discover is good)
+    8) Search (optional for MVP if Discover is good)
         Frontend: search screen with filters; re-use card UI.
         Backend: /search?...&cursor.
         Milestone: filter by tag/role/language.
-    10) CI/CD + Builds
+    9) CI/CD + Builds
         Frontend: EAS preview builds, OTA channel; env wiring.
         Backend: App Runner dev; smoke tests.
         Milestone: testers install via TestFlight/Play Internal and complete core flow.
