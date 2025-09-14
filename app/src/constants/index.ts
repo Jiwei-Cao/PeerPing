@@ -1,4 +1,4 @@
-export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'https://api.peerly.dev/v1';
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'https://api.peerping.dev/v1';
 
 export const TOKEN_KEYS = {
   ACCESS_TOKEN: 'access_token',
