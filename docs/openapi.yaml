@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Peerly API
+  title: PeerPing API
   version: 1.0.0
   description: |
-    Peerly MVP API - Connect learners and teachers within UK cities
+    PeerPing MVP API - Connect learners and teachers within UK cities
     
     ## API Conventions
     - Base path: `/v1`
@@ -14,9 +14,9 @@ info:
     - Rate limiting: Returns 429 with `Retry-After` header
 
 servers:
-  - url: https://api.peerly.dev/v1
+  - url: https://api.peerping.dev/v1
     description: Development server
-  - url: https://api.peerly.com/v1
+  - url: https://api.peerping.com/v1
     description: Production server
 
 tags:
@@ -51,7 +51,7 @@ components:
       properties:
         type:
           type: string
-          example: "https://api.peerly.com/errors/validation"
+          example: "https://api.peerping.com/errors/validation"
         title:
           type: string
           example: "Validation Error"
@@ -100,7 +100,7 @@ components:
         avatarUrl:
           type: string
           format: uri
-          example: "https://cdn.peerly.com/users/123/avatars/456.jpg"
+          example: "https://cdn.peerping.com/users/123/avatars/456.jpg"
         bio:
           type: string
           maxLength: 120

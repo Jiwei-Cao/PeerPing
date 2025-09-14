@@ -1,4 +1,4 @@
-Peerly — MVP Product Specification
+PeerPing — MVP Product Specification
 
 1. Product Goals
 - Connect learners and teachers (or both) within UK cities.
@@ -40,7 +40,7 @@ First-time users see:
 - Land on Discover feed
 
 Returning users see:
-- Login screen with "New to Peerly? Join us" link
+- Login screen with "New to PeerPing? Join us" link
 
 4. Navigation (tabs at the bottom of the screen)
 - Discover → ranked feed of user cards (vertical scroll like instagram posts)

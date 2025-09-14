@@ -1,16 +1,16 @@
-# Peerly
+# PeerPing
 
 A peer-to-peer learning platform connecting learners and teachers within UK cities.
 
 ## Project Structure
 
 ```
-Peerly/
+PeerPing/
 ├── docs/              # Documentation
 │   ├── openapi.yaml   # API specification
 │   ├── api-contract.md
-│   ├── peerly-product-spec.md
-│   └── peerly-tech-spec.md
+│   ├── peerping-product-spec.md
+│   └── peerping-tech-spec.md
 ├── app/               # React Native + Expo app
 │   ├── src/
 │   │   ├── api/       # Generated TypeScript client

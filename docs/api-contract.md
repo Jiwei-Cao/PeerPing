@@ -1,10 +1,10 @@
-# Peerly API Contract
+# PeerPing API Contract
 
-This document provides a comprehensive overview of the Peerly API, auto-generated from the OpenAPI specification.
+This document provides a comprehensive overview of the PeerPing API, auto-generated from the OpenAPI specification.
 
 ## Overview
 
-- **Base URL**: `https://api.peerly.com/v1` (production) / `https://api.peerly.dev/v1` (development)
+- **Base URL**: `https://api.peerping.com/v1` (production) / `https://api.peerping.dev/v1` (development)
 - **Authentication**: Bearer token (JWT)
 - **Content Type**: `application/json`
 - **Error Format**: RFC7807 Problem Details
@@ -34,7 +34,7 @@ Response format:
 Errors follow RFC7807 Problem Details format:
 ```json
 {
-  "type": "https://api.peerly.com/errors/validation",
+  "type": "https://api.peerping.com/errors/validation",
   "title": "Validation Error",
   "status": 400,
   "detail": "The email field is invalid",
@@ -127,7 +127,7 @@ Get current user's complete profile.
   "username": "johndoe",
   "email": "john@example.com",
   "displayName": "John Doe",
-  "avatarUrl": "https://cdn.peerly.com/users/123/avatars/456.jpg",
+  "avatarUrl": "https://cdn.peerping.com/users/123/avatars/456.jpg",
   "bio": "Passionate about languages and cooking",
   "role": "BOTH",
   "city": "London",
@@ -224,7 +224,7 @@ Get personalized discover feed (same city).
     {
       "id": "user-uuid",
       "displayName": "Jane Smith",
-      "avatarUrl": "https://cdn.peerly.com/...",
+      "avatarUrl": "https://cdn.peerping.com/...",
       "bio": "Love teaching cooking",
       "role": "TEACHER",
       "city": "London",

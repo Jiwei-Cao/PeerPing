@@ -1,10 +1,10 @@
-Peerly — MVP Tech Specification 
+PeerPing — MVP Tech Specification 
 
 0) Monorepo 
-Peerly/
+PeerPing/
   docs/
-    peerly-product-spec.md
-    peerly-tech-spec.md
+    peerping-product-spec.md
+    peerping-tech-spec.md
     api-contract.md
     openapi.yaml
     adr/
@@ -73,7 +73,7 @@ Peerly/
 - Mobile: React Native + Expo (EAS builds, OTA updates)
 - Backend: Spring Boot (Java 21), REST over HTTPS
 - DB: PostgreSQL (AWS RDS)
-- Chat: Nakama (1:1); Peerly user_id ⇄ Nakama user_id 1:1
+- Chat: Nakama (1:1); PeerPing user_id ⇄ Nakama user_id 1:1
 - Media: AWS S3 (presigned PUT) + CloudFront
 - Push: Expo Push → APNs/FCM
 - Infra: AWS App Runner (backend), RDS, S3, CloudFront, Route53, ACM
