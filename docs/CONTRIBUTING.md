@@ -1,0 +1,8 @@
+## Development Rules — Keep the App Compilable
+- Every commit/PR must result in an app that **boots in Expo without errors**.  
+- Do not import files that don’t exist.  
+- If a feature isn’t ready, create a **placeholder component (stub)** so imports resolve.  
+- Keep `App.tsx` minimal and always runnable.  
+- Add new libraries with `expo install`, not plain `npm install`.  
+- Don’t leave unused Babel plugins or config references.  
+- Run `npx expo start -c` locally before pushing to confirm the app compiles.  
