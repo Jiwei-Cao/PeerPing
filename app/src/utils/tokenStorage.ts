@@ -1,18 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
 import { TOKEN_KEYS } from '@constants';
 
-// SecureStore is not available on web, so we'll use a simple in-memory fallback
-const webStorage: { [key: string]: string } = {};
-
 class TokenStorage {
-  private isWeb = Platform.OS === 'web';
-  
   async getAccessToken(): Promise<string | null> {
     try {
-      if (this.isWeb) {
-        return webStorage[TOKEN_KEYS.ACCESS_TOKEN] || null;
-      }
       return await SecureStore.getItemAsync(TOKEN_KEYS.ACCESS_TOKEN);
     } catch (error) {
       console.error('Error getting access token:', error);
@@ -22,9 +13,6 @@ class TokenStorage {
 
   async getRefreshToken(): Promise<string | null> {
     try {
-      if (this.isWeb) {
-        return webStorage[TOKEN_KEYS.REFRESH_TOKEN] || null;
-      }
       return await SecureStore.getItemAsync(TOKEN_KEYS.REFRESH_TOKEN);
     } catch (error) {
       console.error('Error getting refresh token:', error);
@@ -34,11 +22,6 @@ class TokenStorage {
 
   async setTokens(accessToken: string, refreshToken: string): Promise<void> {
     try {
-      if (this.isWeb) {
-        webStorage[TOKEN_KEYS.ACCESS_TOKEN] = accessToken;
-        webStorage[TOKEN_KEYS.REFRESH_TOKEN] = refreshToken;
-        return;
-      }
       await Promise.all([
         SecureStore.setItemAsync(TOKEN_KEYS.ACCESS_TOKEN, accessToken),
         SecureStore.setItemAsync(TOKEN_KEYS.REFRESH_TOKEN, refreshToken),
@@ -51,11 +34,6 @@ class TokenStorage {
 
   async clearTokens(): Promise<void> {
     try {
-      if (this.isWeb) {
-        delete webStorage[TOKEN_KEYS.ACCESS_TOKEN];
-        delete webStorage[TOKEN_KEYS.REFRESH_TOKEN];
-        return;
-      }
       await Promise.all([
         SecureStore.deleteItemAsync(TOKEN_KEYS.ACCESS_TOKEN),
         SecureStore.deleteItemAsync(TOKEN_KEYS.REFRESH_TOKEN),

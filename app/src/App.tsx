@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,18 +22,20 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <AuthProvider>
-            <NavigationContainer>
-              <StatusBar style="auto" />
-              <RootNavigator />
-              <Toast config={toastConfig} />
-            </NavigationContainer>
-          </AuthProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthProvider>
+              <NavigationContainer>
+                <StatusBar style="auto" />
+                <RootNavigator />
+                <Toast config={toastConfig} />
+              </NavigationContainer>
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }

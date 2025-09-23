@@ -71,6 +71,7 @@ PeerPing/
 
 1. Platform & Tech
 - Mobile: React Native + Expo (EAS builds, OTA updates)
+- Platforms: iOS + Android only (no web support planned for MVP)
 - Backend: Spring Boot (Java 21), REST over HTTPS
 - DB: PostgreSQL (AWS RDS)
 - Chat: Nakama (1:1); PeerPing user_id ⇄ Nakama user_id 1:1
