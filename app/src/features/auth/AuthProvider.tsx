@@ -27,29 +27,51 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+    
+    const checkAuthStatus = async () => {
+      try {
+        const hasToken = await tokenStorage.hasValidToken();
+        if (mounted) {
+          setIsAuthenticated(hasToken);
+        }
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        if (mounted) {
+          setIsAuthenticated(false);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
     checkAuthStatus();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  const checkAuthStatus = async () => {
+  const login = async (accessToken: string, refreshToken: string) => {
     try {
-      const hasToken = await tokenStorage.hasValidToken();
-      setIsAuthenticated(hasToken);
+      await tokenStorage.setTokens(accessToken, refreshToken);
+      setIsAuthenticated(true);
     } catch (error) {
-      console.error('Error checking auth status:', error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
+      console.error('Error during login:', error);
+      throw error;
     }
   };
 
-  const login = async (accessToken: string, refreshToken: string) => {
-    await tokenStorage.setTokens(accessToken, refreshToken);
-    setIsAuthenticated(true);
-  };
-
   const logout = async () => {
-    await tokenStorage.clearTokens();
-    setIsAuthenticated(false);
+    try {
+      await tokenStorage.clearTokens();
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Error during logout:', error);
+      throw error;
+    }
   };
 
   return (

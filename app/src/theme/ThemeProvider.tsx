@@ -137,8 +137,8 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
-    <ThemeContext.Provider value = {theme}>
+    <ThemeContext.Provider value={theme}>
       {children}
     </ThemeContext.Provider>
-  )
+  );
 }
