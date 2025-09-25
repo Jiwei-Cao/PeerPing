@@ -6,3 +6,5 @@
 - Add new libraries with `expo install`, not plain `npm install`.  
 - Don’t leave unused Babel plugins or config references.  
 - Run `npx expo start -c` locally before pushing to confirm the app compiles.  
+- Think about maintainability and scalability while making any edits.
+- Make sure to read the whole codebase before making any changes.
