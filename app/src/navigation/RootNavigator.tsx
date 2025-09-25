@@ -2,14 +2,18 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '@features/auth/AuthProvider';
 import { Text, View, ActivityIndicator } from 'react-native';
+import { WelcomeScreen } from '@features/onboarding/screens/WelcomeScreen';
 
-// Placeholder screens - will be replaced with actual screens
+// Auth Stack Navigator
+const AuthStack = createNativeStackNavigator();
+
 const AuthNavigator = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Auth Navigator (Login/Signup)</Text>
-  </View>
+  <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthStack.Screen name="Welcome" component={WelcomeScreen} />
+  </AuthStack.Navigator>
 );
 
+// Main App Navigator (placeholder for now)
 const MainNavigator = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <Text>Main App Navigator</Text>
