@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, SafeAreaView, Image } from 'react-native';
 import { useTheme } from '@theme/ThemeProvider';
-import { Button } from '@components/Button';
+import { Button } from '@components';
 import { useNavigation } from '@react-navigation/native';
 
 export const WelcomeScreen = () => {

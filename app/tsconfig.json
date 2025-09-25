@@ -5,12 +5,15 @@
     "paths": {
       "@/*": ["./src/*"],
       "@api/*": ["./src/api/*"],
+      "@api": ["./src/api/index"],
       "@features/*": ["./src/features/*"],
       "@components/*": ["./src/components/*"],
+      "@components": ["./src/components/index"],
       "@hooks/*": ["./src/hooks/*"],
       "@navigation/*": ["./src/navigation/*"],
       "@utils/*": ["./src/utils/*"],
       "@constants/*": ["./src/constants/*"],
+      "@constants": ["./src/constants/index"],
       "@stores/*": ["./src/stores/*"],
       "@theme/*": ["./src/theme/*"]
     }
