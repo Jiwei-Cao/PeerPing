@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '@features/auth/AuthProvider';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { WelcomeScreen } from '@features/onboarding/screens/WelcomeScreen';
+import { RoleSelectionScreen } from '@features/onboarding/screens/RoleSelectionScreen';
 
 // Auth Stack Navigator
 const AuthStack = createNativeStackNavigator();
@@ -10,6 +11,7 @@ const AuthStack = createNativeStackNavigator();
 const AuthNavigator = () => (
   <AuthStack.Navigator screenOptions={{ headerShown: false }}>
     <AuthStack.Screen name="Welcome" component={WelcomeScreen} />
+    <AuthStack.Screen name="RoleSelection" component={RoleSelectionScreen} />
   </AuthStack.Navigator>
 );
 
