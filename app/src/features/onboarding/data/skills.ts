@@ -1,0 +1,81 @@
+export const POPULAR_SKILLS = [
+  // Programming & Tech
+  'JavaScript',
+  'Python',
+  'React',
+  'Web Development',
+  'Mobile Development',
+  'Data Science',
+  'AI & Machine Learning',
+  'UI/UX Design',
+  'Cybersecurity',
+  'Coding Interview Prep',
+
+  // Languages
+  'English',
+  'Spanish',
+  'French',
+  'German',
+  'Mandarin Chinese',
+  'Japanese',
+  'Korean',
+
+  // Creative
+  'Photography',
+  'Video Editing',
+  'Graphic Design',
+  'Digital Art',
+  'Music Production',
+  'Singing',
+  'Playing Guitar',
+  'Playing Piano',
+  'Creative Writing',
+  'Content Creation (TikTok/YouTube)',
+
+  // Business & Career
+  'Public Speaking',
+  'Entrepreneurship',
+  'Finance Basics',
+  'Marketing & Social Media',
+  'Sales',
+  'Project Management',
+  'CV Writing & Interview Skills',
+  'Networking',
+
+  // Lifestyle & Personal Growth
+  'Cooking',
+  'Baking',
+  'Fitness & Gym Training',
+  'Yoga',
+  'Meditation',
+  'Time Management',
+  'Productivity Systems',
+  'Personal Finance & Budgeting',
+
+  // Sports & Fitness
+  'Football (Soccer)',
+  'Basketball',
+  'Volleyball',
+  'Badminton',
+  'Tennis',
+  'Table Tennis',
+  'Swimming',
+  'Running',
+  'Cycling',
+  'Martial Arts',
+  'Boxing',
+  'Climbing',
+  'Dance',
+  'Esports',
+  'chess',
+
+  // Academic Support
+  'Mathematics',
+  'Physics',
+  'Chemistry',
+  'Biology',
+  'Economics',
+  'Philosophy',
+  'History',
+  'Essay Writing & Research Skills',
+];
