@@ -6,6 +6,7 @@ import { WelcomeScreen } from '@features/onboarding/screens/WelcomeScreen';
 import { RoleSelectionScreen } from '@features/onboarding/screens/RoleSelectionScreen';
 import { LearningSkillsSelectionScreen } from '@features/onboarding/screens/LearningSkillsSelectionScreen';
 import { TeachingSkillsSelectionScreen } from '@features/onboarding/screens/TeachingSkillsSelectionScreen';
+import { CitySelectionScreen } from '@features/onboarding/screens/CitySelectionScreen';
 
 // Auth Stack Navigator
 const AuthStack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="RoleSelection" component={RoleSelectionScreen} />
     <AuthStack.Screen name="LearningSkillsSelection" component={LearningSkillsSelectionScreen} />
     <AuthStack.Screen name="TeachingSkillsSelection" component={TeachingSkillsSelectionScreen} />
+    <AuthStack.Screen name="CitySelection" component={CitySelectionScreen} />
   </AuthStack.Navigator>
 );
 
