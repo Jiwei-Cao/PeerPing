@@ -7,6 +7,12 @@ import { RoleSelectionScreen } from '@features/onboarding/screens/RoleSelectionS
 import { LearningSkillsSelectionScreen } from '@features/onboarding/screens/LearningSkillsSelectionScreen';
 import { TeachingSkillsSelectionScreen } from '@features/onboarding/screens/TeachingSkillsSelectionScreen';
 import { CitySelectionScreen } from '@features/onboarding/screens/CitySelectionScreen';
+import { AvailabilitySelectionScreen } from '@features/onboarding/screens/AvailabilitySelectionScreen';
+import { LanguageSelectionScreen } from '@features/onboarding/screens/LanguageSelectionScreen';
+import { ProfileBasicsScreen } from '@features/onboarding/screens/ProfileBasicsScreen';
+import { CreateAccountScreen } from '@features/onboarding/screens/CreateAccountScreen';
+import { SafetyAgreementScreen } from '@features/onboarding/screens/SafetyAgreementScreen';
+import { PushNotificationsScreen } from '@features/onboarding/screens/PushNotificationsScreen';
 
 // Auth Stack Navigator
 const AuthStack = createNativeStackNavigator();
@@ -18,6 +24,12 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="LearningSkillsSelection" component={LearningSkillsSelectionScreen} />
     <AuthStack.Screen name="TeachingSkillsSelection" component={TeachingSkillsSelectionScreen} />
     <AuthStack.Screen name="CitySelection" component={CitySelectionScreen} />
+    <AuthStack.Screen name="AvailabilitySelection" component={AvailabilitySelectionScreen} />
+    <AuthStack.Screen name="LanguageSelection" component={LanguageSelectionScreen} />
+    <AuthStack.Screen name="ProfileBasics" component={ProfileBasicsScreen} />
+    <AuthStack.Screen name="CreateAccount" component={CreateAccountScreen} />
+    <AuthStack.Screen name="SafetyAgreement" component={SafetyAgreementScreen} />
+    <AuthStack.Screen name="PushNotifications" component={PushNotificationsScreen} />
   </AuthStack.Navigator>
 );
 
