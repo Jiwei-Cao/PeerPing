@@ -204,39 +204,105 @@ PeerPing/
 - Route53 + ACM; CloudFront in front of S3.
 
 14. Build Order (revised)
-  1) API contract
-      Frontend: generate TS client (app/src/api) from openapi.yaml; set up routing, theme, state, error toasts.
-      Backend: finalize spec.
-      Milestone: app compiles calling typed client (no raw fetch).
-  2) Onboarding & Auth
-      Frontend: Progressive onboarding (Welcome → Role → Skills → City → Availability → Languages → Profile → Create Account), separate Login screen for returning users, token storage, refresh flow.
-      Backend: /auth/register|login|refresh|logout, /users/me, PUT tags/languages/availability.
-      Milestone: new user completes full onboarding flow and lands on Discover; returning user can log in.
-  3) Media (avatars)
-      Frontend: image picker → call upload-url → PUT to S3 → PATCH profile with URL.
-      Backend: presigned PUT endpoint.
-      Milestone: avatar shows in Profile.
-  4) Discover
-      Frontend: feed UI (infinite scroll + pull-to-refresh), card actions (Save/Request).
-      Backend: /discover?city&limit&cursor, ranking + indexes.
-      Milestone: scroll 2+ pages without dupes; refresh resets feed.
-  5) Connections
-      Frontend: Request button, Requests inbox (Pending/Accepted), Accept/Decline/Cancel.
-      Backend: POST/GET/PATCH connections, idempotency, block checks, rate limit.
-      Milestone: full request lifecycle between two test users.
-  6) Messaging (MVP)
-      Frontend: Chat list + 1:1 thread; send/receive; basic retry.
-      Backend: Nakama integration (or simple tables).
-      Milestone: two devices can chat.
-  7) Analytics + Rate limits
-      Frontend: send key client events; handle 429 with friendly UI.
-      Backend: event logging; 429 + Retry-After.
-      Milestone: events visible server-side; 11th request is blocked.
-  8) Search (optional for MVP if Discover is good)
-      Frontend: search screen with filters; re-use card UI.
-      Backend: /search?...&cursor.
-      Milestone: filter by tag/role/language.
-  9) CI/CD + Builds
-      Frontend: EAS preview builds, OTA channel; env wiring.
-      Backend: App Runner dev; smoke tests.
-      Milestone: testers install via TestFlight/Play Internal and complete core flow.
+
+## PeerPing — MVP Build Order (onboarding unchanged)
+
+### 0. Groundwork 
+- Monorepo skeleton, Docker Compose (Postgres), Flyway baseline.
+- Seed: a few tags + two demo users.
+- Done: RN app boots; Spring Boot /actuator/health green.
+
+### 1. CI/CD & Envs
+- GitHub Actions: build/test/deploy server → AWS App Runner (dev); EAS Preview for app.
+- Secrets: AWS SSM (DB URL, JWT keys).
+- Done: Push to main ships to dev; EAS build installable; app hits https://api.peerping.dev/v1.
+
+### 2. API Contract & Generated Client
+- Finalise OpenAPI (you already have it).
+- FE: generate TS client to app/src/api; no raw fetch; TanStack Query.
+- BE: springdoc /swagger-ui; contract tests.
+- Done: App compiles using generated client only; Swagger reachable.
+
+### 3. Auth + Onboarding (keep flow the same)
+Flow (unchanged): Welcome → Role → Skills → City → Availability → Languages → Profile (display name, bio, avatar UI) → Create Account → Terms → Push.
+
+#### Backend
+- Endpoints: POST /auth/register|login|refresh|logout, GET /users/me, PATCH /users/me, PUT /users/me/{tags,languages,availability}.
+- JWT: access 15–30 min, refresh 7–30 days (rotation). bcrypt(10–12) or Argon2id.
+- Flyway tables: users, profiles, refresh_tokens, user_tag, user_language, availability.
+- Block brute force on login; RFC7807 errors.
+
+#### Frontend
+- Keep all existing screens.
+- Wire screens to endpoints:
+  - Create Account → /auth/register.
+  - After register: PUT tags/languages/availability (batch per your endpoints).
+  - Avatar screen: store placeholder URL for now; real upload in step 10.
+- Token handling: access in memory; refresh in SecureStore; Axios interceptor for refresh.
+- Done: New user completes full onboarding and lands on Discover; returning user logs in; refresh works after app restart.
+
+### 4. Discover (core feed)
+#### Backend
+- GET /discover?limit&cursor[&city] (cursor-based).
+- Candidate set: same city, exclude blocked/connected/self.
+- Ranking v1: tag overlap → language/availability overlaps → recent activity; stable ordering.
+- Indexes: users(city), users(last_active_at), GIN on user tags.
+
+#### Frontend
+- Infinite scroll + pull-to-refresh; uses UserCard; actions wired visually (Save/Request buttons).
+- Done: Scrolls ≥2 pages without dupes; refresh resets; p95 < 300 ms (dev).
+
+### 5. Connections (request → accept)
+#### Backend
+- POST /connections (Idempotency-Key), GET /connections?status=pending|accepted, PATCH /connections/{id} (accept|decline|cancel).
+- Table: connections with unique pair key (LEAST/GREATEST).
+- Rate limit: 10/day/user on POST with 429 + Retry-After.
+- Enforce block checks.
+
+#### Frontend
+- "Request" on card; Requests inbox with Pending/Accepted; Accept/Decline/Cancel.
+- Done: Full lifecycle verified between two test users.
+
+### 6. Messaging (MVP, text-only)
+Recommended (fast): implement on our server first (add Nakama later if you want).
+
+#### Backend
+- Tables: conversations, conversation_participant, messages (BIGINT message_index).
+- Create conversation on accept.
+- Endpoints: GET /conversations, GET /conversations/{id}/messages, POST /conversations/{id}/messages (Idempotency-Key).
+- Soft delete columns prepared, but not used yet.
+
+#### Frontend
+- Chat list + 1:1 thread; send/receive text; basic retry/backoff; optimistic insert.
+- Done: Two devices can chat reliably; last message appears in list.
+
+### 7. Safety & Abuse (MVP)
+#### Backend
+- POST /block/{userId}, POST /report (Idempotency-Key).
+- Block middleware: deny discover/save/connect/message if either side blocked.
+
+#### Frontend
+- Block/Report in profile and chat header with confirm dialogs.
+- Done: Block hides the other user across feed, search, connections, and chat.
+
+### 8. Analytics + 429 UX (minimal)
+#### Backend
+- Simple events table or structured logs for: onboarding_completed, discover_view, request_sent, request_accepted, message_sent.
+
+#### Frontend
+- Tiny track() helper; friendly 429 UI using Retry-After.
+- Done: You can query recent events; scripted 11th request returns 429 and the app surfaces a wait.
+
+### 9. Search (optional for MVP)
+- Backend: GET /search?...&cursor with city/role/lang/availability filters; ILIKE on name/tag; indexes added.
+- Frontend: reuse UserCard; filters panel.
+- Done: Returns expected subsets; pagination ok.
+
+### 10. Media (avatars) — wire up the existing avatar screen
+#### Backend
+- POST /users/me/avatar/upload-url (S3 presigned PUT), validate size/type; store avatar_url (served via CloudFront).
+
+#### Frontend
+- Use existing avatar UI: image picker → PUT to uploadUrl → PATCH /users/me with avatarUrl.
+- Replace placeholder URL with the uploaded one; handle retry on flaky network.
+- Done: Avatar displayed in Profile and cards.
