@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: peerping-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: peerping
+      POSTGRES_PASSWORD: peerping123
+      POSTGRES_DB: peerping
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U peerping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO for S3-compatible storage (for local development)
+  minio:
+    image: minio/minio:latest
+    container_name: peerping-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  # Nakama for chat (add later when implementing messaging)
+  # nakama:
+  #   image: heroiclabs/nakama:3.19.0
+  #   container_name: peerping-nakama
+  #   ports:
+  #     - "7349:7349"
+  #     - "7350:7350"
+  #     - "7351:7351"
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     - "socket.server_key=defaultkey"
+  #   volumes:
+  #     - ./chat/server_modules:/nakama/data/modules
+
+volumes:
+  postgres_data:
+  minio_data:
