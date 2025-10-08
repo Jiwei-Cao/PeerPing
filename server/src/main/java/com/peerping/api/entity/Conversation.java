@@ -21,24 +21,13 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user1_id", nullable = false)
-    private User user1;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user2_id", nullable = false)
-    private User user2;
+    @Column(name = "last_message_at")
+    private Instant lastMessageAt;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "last_message_at")
-    private Instant lastMessageAt;
-
-    @Column(name = "user1_deleted_at")
-    private Instant user1DeletedAt;
-
-    @Column(name = "user2_deleted_at")
-    private Instant user2DeletedAt;
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 }
