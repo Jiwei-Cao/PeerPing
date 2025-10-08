@@ -35,6 +35,9 @@ public class Connection {
     @Builder.Default
     private ConnectionStatus status = ConnectionStatus.PENDING;
 
+    @Column(name = "pair_key", nullable = false, unique = true)
+    private String pairKey;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -42,6 +45,9 @@ public class Connection {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 
     public enum ConnectionStatus {
         PENDING,
