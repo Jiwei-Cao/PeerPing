@@ -33,22 +33,24 @@ public class Report {
     @Column(nullable = false, length = 50)
     private ReportReason reason;
 
-    @Column(length = 500)
+    @Column
     private String detail;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private ReportStatus status = ReportStatus.OPEN;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "handled_by")
+    private User handledBy;
+
+    @Column(name = "handled_at")
+    private Instant handledAt;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
-
-    @Column(name = "reviewed_at")
-    private Instant reviewedAt;
-
-    @Column(name = "reviewed_by")
-    private String reviewedBy;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "review_action", length = 50)
-    private ReviewAction reviewAction;
 
     public enum ReportReason {
         SPAM,
@@ -58,10 +60,9 @@ public class Report {
         OTHER
     }
 
-    public enum ReviewAction {
-        NO_ACTION,
-        WARNING_SENT,
-        USER_SUSPENDED,
-        USER_BANNED
+    public enum ReportStatus {
+        OPEN,
+        ACTIONED,
+        DISMISSED
     }
 }
