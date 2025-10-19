@@ -9,3 +9,4 @@
 - Think about maintainability and scalability while making any edits.
 - Make sure to read the whole codebase before making any changes.
 - Write concise, meaningful comments that explain why the code exists or any non-obvious decisions, and avoid restating what the code already clearly does.
+- Build and test smaller, independent components first before integrating them into larger features to keep development stable and easier to debug.
