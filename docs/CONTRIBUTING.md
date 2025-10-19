@@ -8,3 +8,4 @@
 - Run `npx expo start -c` locally before pushing to confirm the app compiles.  
 - Think about maintainability and scalability while making any edits.
 - Make sure to read the whole codebase before making any changes.
+- Write concise, meaningful comments that explain why the code exists or any non-obvious decisions, and avoid restating what the code already clearly does.
